@@ -25,8 +25,8 @@ class Session_model extends MY_Model {
     }
 
     public function getAllSession() {
-        $sql = "SELECT sessions.*,(SELECT sum(amount) from session_opening_balance WHERE sessions.id = session_opening_balance.session_id) as amount, IFNULL(sch_settings.session_id, 0) as `active` FROM `sessions` 
-        LEFT JOIN sch_settings ON sessions.id=sch_settings.session_id";
+        $sql = "SELECT sessions.*,(SELECT sum(amount) from session_opening_balance WHERE sessions.id = session_opening_balance.session_id) as amount,(SELECT GROUP_CONCAT(concat(payment_by,'_',amount)) from session_opening_balance WHERE sessions.id = session_opening_balance.session_id) as bank_details, IFNULL(sch_settings.session_id, 0) as `active` FROM `sessions` 
+        LEFT JOIN sch_settings ON sessions.id=sch_settings.session_id ";
         $query = $this->db->query($sql);
         return $query->result_array();
     }

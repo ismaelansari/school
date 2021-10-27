@@ -82,7 +82,12 @@ class Sessions extends Admin_Controller {
             }
            # echo $start_year." ".$end_year;die;
         }
-        #echo "<pre>";print_r($session_result);die;
+        
+        $banks = [];
+        foreach($bank as $b){
+            $banks[$b['id']] = $b['name'];
+        }
+        $data['banks'] = $banks;
         $data['sessionlist'] = $session_result;
         $this->load->view('layout/header', $data);
         $this->load->view('session/sessionList', $data);

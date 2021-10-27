@@ -142,12 +142,24 @@
                                     <?php
                                     $count = 1;
                                     foreach ($sessionlist as $session) {
+                                        $bank_details = explode(",", $session['bank_details']);
+                                        $bank_html = "";
+                                        if(!empty($bank_details[0])){
+                                            $bank_html .= "<table border='1'>";
+                                            $bank_html .= "<th>Bank</th><th>Amount</th>";
+                                            foreach($bank_details as $b){
+                                                $b1 = explode('_',$b);
+                                                $bank_html .="<tr><td>".($b1[0] == 0?'Cash':$banks[$b1[0]])."</td><td>$b1[1]</td></tr>";
+                                            }
+                                            $bank_html .= "</table>";
+                                        }
+
                                         ?>
                                         <tr>
                                             <td class="mailbox-name"><?php echo $session['session'] ?></td>
-                                            <td class="mailbox-name"><?php 
+                                            <td class="mailbox-name"><span   title="Opening Balance Details" data-toggle="popover" data-trigger="hover" data-content="<?php echo html_entity_decode($bank_html); ?>"><?php 
                                             echo (number_format($session['amount']??0, 2, '.', ''));
-                                            ?>
+                                            ?></span>
                                             </td>
                                             <td class="mailbox-name"><?php echo number_format($session['income']??0, 2, '.', '') ?></td>
                                             <td class="mailbox-name"><?php echo number_format($session['fee']??0, 2, '.', '') ?></td>
@@ -280,4 +292,9 @@ number.onkeydown = function(e) {
     }
 }
 
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover({
+        html: true,
+    });   
+});
 </script>
